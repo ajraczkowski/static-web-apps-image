@@ -1,0 +1,32 @@
+name: Build and publish docker image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+jobs:
+  build_and_publish_job:
+    runs-on: ubuntu-latest
+    name: Build and Publish Job
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Download Microsoft image and extract binaries
+        shell: bash
+        run: |
+          docker pull mcr.microsoft.com/appsvc/staticappsclient:stable
+          CONTAINER_ID=$(docker run -t -d  mcr.microsoft.com/appsvc/staticappsclient:stable)
+          mkdir -p staticappsclient
+          docker cp ${CONTAINER_ID}:/bin/staticsites ./staticappsclient
+          docker cp ${CONTAINER_ID}:/opt/buildscriptgen ./staticappsclient
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: github.event_name == 'push'
+          tags: ${{ github.repository_owner }}/staticwebapps:latest
