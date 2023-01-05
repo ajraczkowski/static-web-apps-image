@@ -32,9 +32,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
+      - name: Build and push latest
+        if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v3
         with:
           context: .
           push: ${{ github.event_name == 'push' }}
           tags: ghcr.io/${{ github.actor }}/staticwebapps:latest
+      - name: Build and push testing
+        if: github.ref == 'refs/heads/test'
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: ${{ github.event_name == 'push' }}
+          tags: ghcr.io/${{ github.actor }}/staticwebapps:testing
