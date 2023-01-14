@@ -37,12 +37,12 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: ${{ github.event_name == 'push' }}
+          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
           tags: ghcr.io/${{ github.actor }}/staticwebapps:latest
       - name: Build and push testing
         if: github.ref == 'refs/heads/test'
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: ${{ github.event_name == 'push' }}
+          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
           tags: ghcr.io/${{ github.actor }}/staticwebapps:testing
