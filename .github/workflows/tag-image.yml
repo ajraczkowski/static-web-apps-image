@@ -9,7 +9,7 @@ on:
       tag:
         description: Tag to apply to the image
         required: true
-        default: latest
+        default: testing
 
 jobs:
   build_and_publish_job:
@@ -26,6 +26,6 @@ jobs:
         uses: shrink/actions-docker-registry-tag@v4
         with:
           registry: ghcr.io
-          repository: ${{ github.repository }}
-          target: ghcr.io/${{ github.actor }}/staticwebapps:${{ github.event.inputs.target }}
-          tags: ghcr.io/${{ github.actor }}/staticwebapps:${{ github.event.inputs.tag }}
+          repository: staticwebapps
+          target: ${{ github.event.inputs.target }}
+          tags: ${{ github.event.inputs.tag }}
