@@ -1,4 +1,4 @@
-name: Build and publish docker image
+name: Build docker image
 
 on:
   push:
@@ -14,7 +14,7 @@ on:
 jobs:
   build_and_publish_job:
     runs-on: ubuntu-latest
-    name: Build and Publish Job
+    name: Build and Push Job
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,17 +32,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push latest
-        if: github.ref == 'refs/heads/main'
+      - name: Push image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-          tags: ghcr.io/${{ github.actor }}/staticwebapps:latest
-      - name: Build and push testing
-        if: github.ref == 'refs/heads/test'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-          tags: ghcr.io/${{ github.actor }}/staticwebapps:testing
