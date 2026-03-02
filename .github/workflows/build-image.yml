@@ -1,4 +1,4 @@
-name: Build docker image
+name: Build and push docker image
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_publish_job:
+  build_and_push_job:
     runs-on: ubuntu-latest
     name: Build and Push Job
     steps:
@@ -36,7 +36,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ github.actor }}/staticwebapps
+          images: ghcr.io/${{ github.actor }}/staticwebapps
           tags: |
             type=raw,value={{date 'YYYYMMDD-HHmmss' tz='UTC'}}
       - name: Push image
