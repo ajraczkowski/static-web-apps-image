@@ -39,7 +39,7 @@ jobs:
           images: ghcr.io/${{ github.actor }}/staticwebapps
           tags: |
             type=raw,value={{date 'YYYYMMDD-HHmmss' tz='UTC'}}
-      - name: Push image
+      - name: Build and Push image
         uses: docker/build-push-action@v6
         with:
           context: .
